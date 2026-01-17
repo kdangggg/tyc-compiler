@@ -12,6 +12,7 @@ Usage:
     python run.py build
     python run.py test-lexer
     python run.py test-parser
+    python run.py test-ast
     python run.py clean
 
     # On macOS/Linux:
@@ -20,6 +21,7 @@ Usage:
     python3 run.py build
     python3 run.py test-lexer
     python3 run.py test-parser
+    python3 run.py test-ast
     python3 run.py clean
 """
 
@@ -161,19 +163,60 @@ class TyCBuilder:
         print(self.colors.blue("TyC Project - Available Commands:"))
         print()
         print(self.colors.green("Setup & Build:"))
-        print(self.colors.yellow("  python3 run.py setup     - Install dependencies and set up environment"))
-        print(self.colors.yellow("  python3 run.py build     - Compile ANTLR grammar files"))
-        print(self.colors.yellow("  python3 run.py check     - Check if required tools are installed"))
+        print(
+            self.colors.yellow(
+                "  python3 run.py setup     - Install dependencies and set up environment"
+            )
+        )
+        print(
+            self.colors.yellow(
+                "  python3 run.py build     - Compile ANTLR grammar files"
+            )
+        )
+        print(
+            self.colors.yellow(
+                "  python3 run.py check     - Check if required tools are installed"
+            )
+        )
         print()
         print(self.colors.green("Testing:"))
-        print(self.colors.yellow("  python3 run.py test-lexer  - Run lexer tests and generate reports"))
-        print(self.colors.yellow("  python3 run.py test-parser - Run parser tests and generate reports"))
+        print(
+            self.colors.yellow(
+                "  python3 run.py test-lexer  - Run lexer tests and generate reports"
+            )
+        )
+        print(
+            self.colors.yellow(
+                "  python3 run.py test-parser - Run parser tests and generate reports"
+            )
+        )
+        print(
+            self.colors.yellow(
+                "  python3 run.py test-ast    - Run AST generation tests and generate reports"
+            )
+        )
         print()
         print(self.colors.green("Cleaning:"))
-        print(self.colors.yellow("  python3 run.py clean         - Clean build directories"))
-        print(self.colors.yellow("  python3 run.py clean-cache   - Clean Python cache files"))
-        print(self.colors.yellow("  python3 run.py clean-reports - Clean test reports directory"))
-        print(self.colors.yellow("  python3 run.py clean-venv    - Remove virtual environment"))
+        print(
+            self.colors.yellow(
+                "  python3 run.py clean         - Clean build directories"
+            )
+        )
+        print(
+            self.colors.yellow(
+                "  python3 run.py clean-cache   - Clean Python cache files"
+            )
+        )
+        print(
+            self.colors.yellow(
+                "  python3 run.py clean-reports - Clean test reports directory"
+            )
+        )
+        print(
+            self.colors.yellow(
+                "  python3 run.py clean-venv    - Remove virtual environment"
+            )
+        )
         print()
         print(self.colors.green("Environment:"))
         print(f"  Virtual environment: {self.venv_dir}")
@@ -197,13 +240,21 @@ class TyCBuilder:
         print()
 
         # Check Python
-        print(self.colors.yellow(f"Checking Python {self.python_version} installation..."))
+        print(
+            self.colors.yellow(f"Checking Python {self.python_version} installation...")
+        )
         python_cmd = self.find_python()
         if python_cmd:
-            print(self.colors.green(f"✓ Python {self.python_version} found: {python_cmd}"))
+            print(
+                self.colors.green(f"✓ Python {self.python_version} found: {python_cmd}")
+            )
             python_ok = True
         else:
-            print(self.colors.red(f"✗ Python {self.python_version} is not installed or not found"))
+            print(
+                self.colors.red(
+                    f"✗ Python {self.python_version} is not installed or not found"
+                )
+            )
             python_ok = False
 
         print()
@@ -229,7 +280,11 @@ class TyCBuilder:
             self.run_command([python_cmd, "-m", "venv", str(self.venv_dir)])
             print(self.colors.green(f"Virtual environment created at {self.venv_dir}"))
         else:
-            print(self.colors.blue(f"Virtual environment already exists at {self.venv_dir}"))
+            print(
+                self.colors.blue(
+                    f"Virtual environment already exists at {self.venv_dir}"
+                )
+            )
 
         # Download ANTLR
         print(self.colors.yellow(f"Downloading ANTLR version {self.antlr_version}..."))
@@ -329,7 +384,9 @@ class TyCBuilder:
     def test_lexer(self):
         """Run lexer tests."""
         if not self.build_dir.exists():
-            print(self.colors.yellow("Build directory not found. Running build first..."))
+            print(
+                self.colors.yellow("Build directory not found. Running build first...")
+            )
             self.build_grammar()
 
         print(self.colors.yellow("Running lexer tests..."))
@@ -354,13 +411,19 @@ class TyCBuilder:
             check=False,
         )
 
-        print(self.colors.green(f"Lexer tests completed. Reports at {lexer_report_dir}/index.html"))
+        print(
+            self.colors.green(
+                f"Lexer tests completed. Reports at {lexer_report_dir}/index.html"
+            )
+        )
         self.clean_cache()
 
     def test_parser(self):
         """Run parser tests."""
         if not self.build_dir.exists():
-            print(self.colors.yellow("Build directory not found. Running build first..."))
+            print(
+                self.colors.yellow("Build directory not found. Running build first...")
+            )
             self.build_grammar()
 
         print(self.colors.yellow("Running parser tests..."))
@@ -385,7 +448,49 @@ class TyCBuilder:
             check=False,
         )
 
-        print(self.colors.green(f"Parser tests completed. Reports at {parser_report_dir}/index.html"))
+        print(
+            self.colors.green(
+                f"Parser tests completed. Reports at {parser_report_dir}/index.html"
+            )
+        )
+        self.clean_cache()
+
+    def test_ast(self):
+        """Run AST generation tests."""
+        if not self.build_dir.exists():
+            print(
+                self.colors.yellow("Build directory not found. Running build first...")
+            )
+            self.build_grammar()
+
+        print(self.colors.yellow("Running AST generation tests..."))
+        ast_report_dir = self.report_dir / "ast"
+        if ast_report_dir.exists():
+            shutil.rmtree(ast_report_dir)
+        self.report_dir.mkdir(exist_ok=True)
+
+        env = os.environ.copy()
+        env["PYTHONPATH"] = str(self.root_dir)
+
+        self.run_command(
+            [
+                str(self.venv_python3),
+                "-m",
+                "pytest",
+                "tests/test_ast_gen.py",
+                f"--html={ast_report_dir}/index.html",
+                "--timeout=5",
+                "--self-contained-html",
+                "-v",
+            ],
+            check=False,
+        )
+
+        print(
+            self.colors.green(
+                f"AST generation tests completed. Reports at {ast_report_dir}/index.html"
+            )
+        )
         self.clean_cache()
 
 
@@ -411,6 +516,7 @@ def main():
             "clean-venv",
             "test-lexer",
             "test-parser",
+            "test-ast",
         ],
         help="Command to execute",
     )
@@ -430,6 +536,7 @@ def main():
         "clean-venv": builder.clean_venv,
         "test-lexer": builder.test_lexer,
         "test-parser": builder.test_parser,
+        "test-ast": builder.test_ast,
     }
 
     if args.command in commands:

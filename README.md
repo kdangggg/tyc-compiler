@@ -69,6 +69,47 @@ For lexical errors, the lexer must return the following tokens with specific lex
 
 ---
 
+## Assignment 2 - AST Generation
+
+### Required Tasks to Complete
+
+1. **Study the AST Node Structure**
+
+   - Read carefully all node classes in `src/utils/nodes.py`
+   - Understand the AST node hierarchy and their properties
+   - Master how different language constructs map to AST nodes
+
+2. **Implement the ASTGeneration Class**
+
+   - Create a class `ASTGeneration` in `src/astgen/ast_generation.py`
+   - Inherit from `TyCVisitor` (generated from ANTLR4)
+   - Override visitor methods to construct appropriate AST nodes
+   - Handle all language constructs defined in the TyC specification
+
+3. **Write AST Generation Test Cases**
+   - Implement test cases in `tests/test_ast_gen.py`
+   - Test AST generation for all language features
+   - Verify correct node types and structure
+   - Test edge cases and complex nested structures
+
+### AST Generation Requirements
+
+The `ASTGeneration` class must:
+
+- **Inherit from TyCVisitor**: Use the visitor pattern to traverse parse trees
+- **Return AST nodes**: Each visit method should return appropriate node objects from `nodes.py`
+- **Handle all constructs**: Support all language features defined in the grammar
+- **Maintain structure**: Preserve the logical structure and relationships between language elements
+
+### Evaluation Criteria
+
+- **AST Implementation**: Correctness and completeness of the `ASTGeneration` class
+- **Node Usage**: Proper utilization of node classes from `nodes.py`
+- **Test Coverage**: Quality and comprehensiveness of AST generation test cases
+- **Structure Accuracy**: AST must correctly represent the source program structure
+
+---
+
 ## Project Structure
 
 ```
@@ -81,15 +122,20 @@ For lexical errors, the lexer must return the following tokens with specific lex
 ├── external/             # External dependencies
 │   └── antlr-4.13.2-complete.jar
 ├── src/                  # Source code
+│   ├── astgen/           # AST generation module
+│   │   ├── __init__.py   # Package initialization
+│   │   └── ast_generation.py # ASTGeneration class implementation
 │   ├── grammar/          # Grammar definitions
 │   │   ├── TyC.g4        # ANTLR4 grammar specification
 │   │   └── lexererr.py   # Custom lexer error classes
 │   └── utils/            # Utility modules
 │       ├── error_listener.py
-│       └── visitor.py
+│       ├── nodes.py      # AST node class definitions
+│       └── visitor.py    # Base visitor classes
 └── tests/                # Test suite
     ├── test_lexer.py     # Lexer tests
     ├── test_parser.py    # Parser tests
+    ├── test_ast_gen.py   # AST generation tests
     └── utils.py          # Testing utilities
 ```
 
@@ -135,6 +181,7 @@ For lexical errors, the lexer must return the following tokens with specific lex
    ```bash
    python3 run.py test-lexer
    python3 run.py test-parser
+   python3 run.py test-ast
    ```
 
 ## Available Commands
@@ -144,6 +191,7 @@ For lexical errors, the lexer must return the following tokens with specific lex
 - `python3 run.py check` - Verify required tools are installed
 - `python3 run.py test-lexer` - Run lexer tests
 - `python3 run.py test-parser` - Run parser tests
+- `python3 run.py test-ast` - Run AST generation tests
 - `python3 run.py clean` - Clean build files
 
 ## License
