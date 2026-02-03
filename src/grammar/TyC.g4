@@ -45,7 +45,7 @@ structMember
     : typeSpec ID SEMI
     ;
 
-// return type can be omitted (inferred)【turn5file0†tyc_specification.md†L44-L46】
+// return type can be omitted (inferred)
 funcDecl
     : returnType ID LPAREN paramList? RPAREN block
     | ID LPAREN paramList? RPAREN block
@@ -55,7 +55,7 @@ paramList
     : param (COMMA param)*
     ;
 
-// params must have explicit type (not auto)【turn5file0†tyc_specification.md†L55-L56】
+// params must have explicit type (not auto)
 param
     : typeSpec ID
     ;
@@ -128,7 +128,7 @@ forVarDecl
     | typeSpec ID (ASSIGN initValue)?
     ;
 
-// switch statement (supports empty body)【turn4file7†tyc_specification.md†L1-L4】
+// switch statement (supports empty body)
 switchStmt
     : SWITCH LPAREN expr RPAREN LBRACE switchSection* defaultSection? RBRACE
     ;
@@ -141,7 +141,7 @@ defaultSection
     : DEFAULT COLON stmt*
     ;
 
-// spec allows constant expressions like 1+2, (4), +5, -6【turn4file7†tyc_specification.md†L26-L40】
+// spec allows constant expressions like 1+2, (4), +5, -6
 constExpr
     : expr
     ;
@@ -164,7 +164,7 @@ exprStmt
 
 /* =========================
  *        EXPRESSIONS
- * precedence & associativity per spec【turn5file3†tyc_specification.md†L42-L59】
+ * precedence & associativity per spec
  * ========================= */
 
 expr
@@ -268,7 +268,7 @@ SWITCH: 'switch';
 VOID: 'void';
 WHILE: 'while';
 
-// operators & separators【turn5file9†tyc_specification.md†L42-L53】【turn5file1†tyc_specification.md†L5-L8】
+// operators & separators
 INC: '++';
 DEC: '--';
 LE: '<=';
@@ -297,7 +297,7 @@ SEMI: ';';
 COMMA: ',';
 COLON: ':';
 
-// identifiers【turn5file2†tyc_specification.md†L80-L83】
+// identifiers
 ID: [a-zA-Z_] [a-zA-Z0-9_]* ;
 
 // numeric literals
@@ -314,18 +314,18 @@ INTLIT
     : DIGIT+
     ;
 
-// comments【turn5file2†tyc_specification.md†L58-L71】
+// comments
 LINE_COMMENT: '//' ~[\r\n]* -> skip;
 BLOCK_COMMENT: '/*' .*? '*/' -> skip;
 
-// whitespace (includes formfeed \f)【turn5file2†tyc_specification.md†L54-L55】
+// whitespace 
 WS: [ \t\r\n\f]+ -> skip;
 
 /*
 String literal rules:
-- valid: strip quotes => token text is content only【turn5file1†tyc_specification.md†L50-L50】
-- errors: strip opening quote; ILLEGAL_ESCAPE includes up to illegal escape【turn5file4†tyc_specification.md†L1-L9】
-- detection order: ILLEGAL_ESCAPE first, then UNCLOSE_STRING, then STRINGLIT【turn5file4†tyc_specification.md†L5-L9】
+- valid: strip quotes => token text is content only
+- errors: strip opening quote; ILLEGAL_ESCAPE includes up to illegal escape
+- detection order: ILLEGAL_ESCAPE first, then UNCLOSE_STRING, then STRINGLIT
 */
 fragment ESC_SEQ: '\\' [bfrnt"\\];
 fragment STR_CHAR: ~["\\\r\n];
