@@ -29,7 +29,7 @@ options{
  * ========================= */
 
 program
-    : decl+ EOF
+    : decl* EOF
     ;
 
 decl
